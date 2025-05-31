@@ -34,9 +34,32 @@ const habitSlice = createSlice({
 
       state.habits.push(newHabit);
     },
+    toggleHabit: (
+      state,
+      action: PayloadAction<{ id: string; data: string }>
+    ) => {
+      const habit = state.habits.find((h) => h.id === action.payload.id);
+
+      if (habit) {
+        const index = habit.completedDates.indexOf(action.payload.data);
+        if (index > -1) {
+          habit.completedDates.splice(index, 1);
+        } else {
+          habit.completedDates.push(action.payload.data);
+        }
+      }
+    },
+    remove: (
+      state, 
+      action: PayloadAction<{ id: string }>
+    ) => {
+      const filtered = state.habits.filter((item) => item.id !== action.payload.id)
+      //console.log("filtered" , filtered)
+     state.habits = filtered
+    },
   },
 });
 
-export const { addHabit } = habitSlice.actions;
+export const { addHabit, toggleHabit ,remove } = habitSlice.actions;
 
 export default habitSlice.reducer;
